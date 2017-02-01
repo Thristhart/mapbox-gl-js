@@ -72,8 +72,8 @@ class ScrollZoomHandler {
         if (e.type === 'wheel') {
             value = e.deltaY;
             // Firefox doubles the values on retina screens...
-            if (firefox && e.deltaMode === window.WheelEvent.DOM_DELTA_PIXEL) value /= browser.devicePixelRatio;
-            if (e.deltaMode === window.WheelEvent.DOM_DELTA_LINE) value *= 40;
+            if (firefox && e.deltaMode === this._map.window.WheelEvent.DOM_DELTA_PIXEL) value /= browser.devicePixelRatio;
+            if (e.deltaMode === this._map.window.WheelEvent.DOM_DELTA_LINE) value *= 40;
 
         } else if (e.type === 'mousewheel') {
             value = -e.wheelDeltaY;

@@ -2,7 +2,6 @@
 
 const DOM = require('../../util/dom');
 const util = require('../../util/util');
-const window = require('../../util/window');
 
 const inertiaLinearity = 0.3,
     inertiaEasing = util.bezier(0, 0, inertiaLinearity, 1),
@@ -78,11 +77,11 @@ class DragPanHandler {
         if (this.isActive()) return;
 
         if (e.touches) {
-            window.document.addEventListener('touchmove', this._onMove);
-            window.document.addEventListener('touchend', this._onTouchEnd);
+            this._map.window.document.addEventListener('touchmove', this._onMove);
+            this._map.window.document.addEventListener('touchend', this._onTouchEnd);
         } else {
-            window.document.addEventListener('mousemove', this._onMove);
-            window.document.addEventListener('mouseup', this._onMouseUp);
+            this._map.window.document.addEventListener('mousemove', this._onMove);
+            this._map.window.document.addEventListener('mouseup', this._onMouseUp);
         }
 
         this._active = false;
@@ -163,15 +162,15 @@ class DragPanHandler {
     _onMouseUp(e) {
         if (this._ignoreEvent(e)) return;
         this._onUp(e);
-        window.document.removeEventListener('mousemove', this._onMove);
-        window.document.removeEventListener('mouseup', this._onMouseUp);
+        this._map.window.document.removeEventListener('mousemove', this._onMove);
+        this._map.window.document.removeEventListener('mouseup', this._onMouseUp);
     }
 
     _onTouchEnd(e) {
         if (this._ignoreEvent(e)) return;
         this._onUp(e);
-        window.document.removeEventListener('touchmove', this._onMove);
-        window.document.removeEventListener('touchend', this._onTouchEnd);
+        this._map.window.document.removeEventListener('touchmove', this._onMove);
+        this._map.window.document.removeEventListener('touchend', this._onTouchEnd);
     }
 
     _fireEvent(type, e) {

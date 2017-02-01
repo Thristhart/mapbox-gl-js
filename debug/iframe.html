@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Mapbox GL JS debug page</title>
+    <meta charset='utf-8'>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <link rel='stylesheet' href='/dist/mapbox-gl.css' />
+    <style>
+        body { margin: 0; padding: 0; }
+        html, body, #map { height: 100%; }
+
+        #target {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          display: block;
+          width: 100%;
+          height: 100%;
+          border: none;
+        }
+    </style>
+</head>
+
+<body>
+<iframe id="target"></iframe>
+
+<script src='/dist/mapbox-gl-dev.js'></script>
+<script src='/debug/access_token_generated.js'></script>
+<script>
+var target = document.querySelector("#target");
+target.contentDocument.body.innerHTML = "<div id='map'></div>";
+
+var mapEl = target.contentDocument.querySelector("#map");
+
+var map = window.map = new mapboxgl.Map({
+    container: mapEl,
+    zoom: 12.5,
+    center: [-77.01866, 38.888],
+    style: 'mapbox://styles/mapbox/streets-v10',
+    hash: true,
+    customWindow: target.contentWindow
+});
+
+</script>
+</body>
+</html>
+

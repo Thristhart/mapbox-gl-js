@@ -3,7 +3,6 @@
 const DOM = require('../../util/dom');
 const LngLatBounds = require('../../geo/lng_lat_bounds');
 const util = require('../../util/util');
-const window = require('../../util/window');
 
 /**
  * The `BoxZoomHandler` allows the user to zoom the map to fit within a bounding box.
@@ -71,9 +70,9 @@ class BoxZoomHandler {
     _onMouseDown(e) {
         if (!(e.shiftKey && e.button === 0)) return;
 
-        window.document.addEventListener('mousemove', this._onMouseMove, false);
-        window.document.addEventListener('keydown', this._onKeyDown, false);
-        window.document.addEventListener('mouseup', this._onMouseUp, false);
+        this._map.window.document.addEventListener('mousemove', this._onMouseMove, false);
+        this._map.window.document.addEventListener('keydown', this._onKeyDown, false);
+        this._map.window.document.addEventListener('mouseup', this._onMouseUp, false);
 
         DOM.disableDrag();
         this._startPos = DOM.mousePos(this._el, e);
@@ -131,9 +130,9 @@ class BoxZoomHandler {
     _finish() {
         this._active = false;
 
-        window.document.removeEventListener('mousemove', this._onMouseMove, false);
-        window.document.removeEventListener('keydown', this._onKeyDown, false);
-        window.document.removeEventListener('mouseup', this._onMouseUp, false);
+        this._map.window.document.removeEventListener('mousemove', this._onMouseMove, false);
+        this._map.window.document.removeEventListener('keydown', this._onKeyDown, false);
+        this._map.window.document.removeEventListener('mouseup', this._onMouseUp, false);
 
         this._container.classList.remove('mapboxgl-crosshair');
 

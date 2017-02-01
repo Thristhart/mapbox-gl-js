@@ -2,7 +2,6 @@
 
 const DOM = require('../../util/dom');
 const util = require('../../util/util');
-const window = require('../../util/window');
 
 const inertiaLinearity = 0.25,
     inertiaEasing = util.bezier(0, 0, inertiaLinearity, 1),
@@ -80,8 +79,8 @@ class DragRotateHandler {
         if (this._ignoreEvent(e)) return;
         if (this.isActive()) return;
 
-        window.document.addEventListener('mousemove', this._onMove);
-        window.document.addEventListener('mouseup', this._onUp);
+        this._map.window.document.addEventListener('mousemove', this._onMove);
+        this._map.window.document.addEventListener('mouseup', this._onUp);
 
         this._active = false;
         this._inertia = [[Date.now(), this._map.getBearing()]];
@@ -126,8 +125,8 @@ class DragRotateHandler {
 
     _onUp(e) {
         if (this._ignoreEvent(e)) return;
-        window.document.removeEventListener('mousemove', this._onMove);
-        window.document.removeEventListener('mouseup', this._onUp);
+        this._map.window.document.removeEventListener('mousemove', this._onMove);
+        this._map.window.document.removeEventListener('mouseup', this._onUp);
 
         if (!this.isActive()) return;
 
@@ -202,7 +201,7 @@ class DragRotateHandler {
                 button = (e.ctrlKey ? 0 : 2);   // ? ctrl+left button : right button
             let eventButton = e.button;
             if (typeof InstallTrigger !== 'undefined' && e.button === 2 && e.ctrlKey &&
-                window.navigator.platform.toUpperCase().indexOf('MAC') >= 0) {
+                this._map.window.navigator.platform.toUpperCase().indexOf('MAC') >= 0) {
                 // Fix for https://github.com/mapbox/mapbox-gl-js/issues/3131:
                 // Firefox (detected by InstallTrigger) on Mac determines e.button = 2 when
                 // using Control + left click

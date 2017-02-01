@@ -54,7 +54,9 @@ const defaultOptions = {
 
     trackResize: true,
 
-    renderWorldCopies: true
+    renderWorldCopies: true,
+
+    customWindow: null
 };
 
 /**
@@ -133,6 +135,8 @@ class Map extends Camera {
     constructor(options) {
         options = util.extend({}, defaultOptions, options);
 
+        this.window = options.customWindow || window;
+
         const transform = new Transform(options.minZoom, options.maxZoom, options.renderWorldCopies);
         super(transform, options);
 
@@ -143,7 +147,7 @@ class Map extends Camera {
         this._bearingSnap = options.bearingSnap;
 
         if (typeof options.container === 'string') {
-            this._container = window.document.getElementById(options.container);
+            this._container = this.window.document.getElementById(options.container);
             if (!this._container) throw new Error(`Container '${options.container}' not found.`);
         } else {
             this._container = options.container;
@@ -176,9 +180,9 @@ class Map extends Camera {
             this._rerender();
         });
 
-        if (typeof window !== 'undefined') {
-            window.addEventListener('online', this._onWindowOnline, false);
-            window.addEventListener('resize', this._onWindowResize, false);
+        if (typeof this.window !== 'undefined') {
+            this.window.addEventListener('online', this._onWindowOnline, false);
+            this.window.addEventListener('resize', this._onWindowResize, false);
         }
 
         bindHandlers(this, options);
@@ -1079,7 +1083,7 @@ class Map extends Camera {
     }
 
     _resizeCanvas(width, height) {
-        const pixelRatio = window.devicePixelRatio || 1;
+        const pixelRatio = this.window.devicePixelRatio || 1;
 
         // Request the required canvas size taking the pixelratio into account.
         this._canvas.width = pixelRatio * width;
@@ -1231,8 +1235,8 @@ class Map extends Camera {
         if (this._hash) this._hash.remove();
         browser.cancelFrame(this._frameId);
         this.setStyle(null);
-        if (typeof window !== 'undefined') {
-            window.removeEventListener('resize', this._onWindowResize, false);
+        if (typeof this.window !== 'undefined') {
+            this.window.removeEventListener('resize', this._onWindowResize, false);
         }
         const extension = this.painter.gl.getExtension('WEBGL_lose_context');
         if (extension) extension.loseContext();

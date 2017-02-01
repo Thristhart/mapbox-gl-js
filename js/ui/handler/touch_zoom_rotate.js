@@ -2,7 +2,6 @@
 
 const DOM = require('../../util/dom');
 const util = require('../../util/util');
-const window = require('../../util/window');
 
 const inertiaLinearity = 0.15,
     inertiaEasing = util.bezier(0, 0, inertiaLinearity, 1),
@@ -102,8 +101,8 @@ class TouchZoomRotateHandler {
         this._gestureIntent = undefined;
         this._inertia = [];
 
-        window.document.addEventListener('touchmove', this._onMove, false);
-        window.document.addEventListener('touchend', this._onEnd, false);
+        this._map.window.document.addEventListener('touchmove', this._onMove, false);
+        this._map.window.document.addEventListener('touchend', this._onEnd, false);
     }
 
     _onMove(e) {
@@ -156,8 +155,8 @@ class TouchZoomRotateHandler {
     }
 
     _onEnd(e) {
-        window.document.removeEventListener('touchmove', this._onMove);
-        window.document.removeEventListener('touchend', this._onEnd);
+        this._map.window.document.removeEventListener('touchmove', this._onMove);
+        this._map.window.document.removeEventListener('touchend', this._onEnd);
         this._drainInertiaBuffer();
 
         const inertia = this._inertia,
